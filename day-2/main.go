@@ -10,6 +10,9 @@ import (
 
 type Choice struct {
 	Beats *Choice
+	Ties  *Choice
+	Loses *Choice
+	Score int
 }
 
 func (c *Choice) WinsAgainst(o *Choice) bool {
@@ -17,12 +20,28 @@ func (c *Choice) WinsAgainst(o *Choice) bool {
 }
 
 func (c *Choice) TiesAgainst(o *Choice) bool {
-	return c == o
+	return c.Ties == o
 }
 
-var rock = Choice{}
-var paper = Choice{}
-var scissors = Choice{}
+func (c *Choice) LosesAgainst(o *Choice) bool {
+	return c.Loses == o
+}
+
+var youWin = func(opponentChoice *Choice) *Choice {
+	return opponentChoice.Loses
+}
+
+var youLose = func(opponentChoice *Choice) *Choice {
+	return opponentChoice.Beats
+}
+
+var youTie = func(opponentChoice *Choice) *Choice {
+	return opponentChoice.Ties
+}
+
+var rock = Choice{Score: 1}
+var paper = Choice{Score: 2}
+var scissors = Choice{Score: 3}
 
 var opponentChoiceMap = map[string]*Choice{
 	"A": &rock,
@@ -30,26 +49,23 @@ var opponentChoiceMap = map[string]*Choice{
 	"C": &scissors,
 }
 
-var yourChoiceMap = map[string]*Choice{
-	"X": &rock,
-	"Y": &paper,
-	"Z": &scissors,
+var yourChoiceMap = map[string](func(*Choice) *Choice){
+	"X": youLose,
+	"Y": youTie,
+	"Z": youWin,
 }
 
-func ScoreRound(opponentChoice *Choice, yourChoice *Choice, scoreMap map[Choice]int) int {
-	choiceScore := scoreMap[*yourChoice]
-
-	outcomeScore := 0
+func ScoreRound(opponentChoice *Choice, yourChoice *Choice) int {
 
 	if yourChoice.WinsAgainst(opponentChoice) {
-		outcomeScore += 6
+		return yourChoice.Score + 6
 	}
 
 	if yourChoice.TiesAgainst(opponentChoice) {
-		outcomeScore += 3
+		return yourChoice.Score + 3
 	}
 
-	return choiceScore + outcomeScore
+	return yourChoice.Score
 }
 
 func unpack(s string) (string, string) {
@@ -59,14 +75,14 @@ func unpack(s string) (string, string) {
 
 func main() {
 	rock.Beats = &scissors
+	rock.Ties = &rock
+	rock.Loses = &paper
 	scissors.Beats = &paper
+	scissors.Ties = &scissors
+	scissors.Loses = &rock
 	paper.Beats = &rock
-
-	scoreMap := make(map[Choice]int)
-
-	scoreMap[rock] = 1
-	scoreMap[paper] = 2
-	scoreMap[scissors] = 3
+	paper.Ties = &paper
+	paper.Loses = &scissors
 
 	file, err := os.Open("./input.txt")
 
@@ -82,10 +98,10 @@ func main() {
 
 	for scanner.Scan() {
 		str := scanner.Text()
-		opponentInput, yourInput := unpack(str)
+		opponentInput, outcomeInput := unpack(str)
 		opponentChoice := opponentChoiceMap[opponentInput]
-		yourChoice := yourChoiceMap[yourInput]
-		score += ScoreRound(opponentChoice, yourChoice, scoreMap)
+		yourChoice := yourChoiceMap[outcomeInput](opponentChoice)
+		score += ScoreRound(opponentChoice, yourChoice)
 	}
 
 	fmt.Printf("highest score: %d\n", score)
