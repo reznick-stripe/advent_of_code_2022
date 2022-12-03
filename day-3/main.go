@@ -26,17 +26,17 @@ func logIt(s string) {
 var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 var priorityMap = make(map[rune]int)
 
-func intersection(rucksacks [3]Rucksack) rune {
+func intersection(group Group) rune {
 	h := make(map[rune]uint8)
-	for _, e := range rucksacks[0] {
+	for _, e := range group.Rucksacks[0] {
 		h[e] |= 0b100
 	}
 
-	for _, e := range rucksacks[1] {
+	for _, e := range group.Rucksacks[1] {
 		h[e] |= 0b010
 	}
 
-	for _, e := range rucksacks[2] {
+	for _, e := range group.Rucksacks[2] {
 		h[e] |= 0b001
 	}
 
@@ -91,7 +91,7 @@ func main() {
 			groups[len(groups)-1].Rucksacks[m] = []rune(scanner.Text())
 		} else if m == 2 {
 			groups[len(groups)-1].Rucksacks[m] = []rune(scanner.Text())
-			sum += priorityMap[intersection(groups[len(groups)-1].Rucksacks)]
+			sum += priorityMap[intersection(groups[len(groups)-1])]
 			if debug() {
 				logIt(fmt.Sprintf("group=%d", len(groups)-1))
 				logIt(fmt.Sprintf("priority_sum=%d", sum))
