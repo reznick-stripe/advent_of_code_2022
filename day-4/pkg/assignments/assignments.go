@@ -32,10 +32,6 @@ func NewAssignmentFromString(s string) (*Assignment, error) {
 		return nil, err
 	}
 
-	if lower == upper {
-		return nil, errors.New("lower and upper match")
-	}
-
 	if lower > upper {
 		return nil, errors.New("lower is bigger than upper")
 	}

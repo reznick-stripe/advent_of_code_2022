@@ -56,24 +56,6 @@ func TestAssignmentFromString(t *testing.T) {
 		}
 	})
 
-	t.Run("zero range", func(t *testing.T) {
-		input := "1-1"
-
-		a, err := NewAssignmentFromString(input)
-
-		if a != nil {
-			t.Errorf("expected no assignment, got %v", a)
-		}
-
-		if err == nil {
-			t.Error("expected an error")
-		}
-
-		if !strings.Contains(err.Error(), "lower and upper match") {
-			t.Errorf("expected 'lower and upper match', got %v", err)
-		}
-	})
-
 	t.Run("nonesense range", func(t *testing.T) {
 		input := "2-1"
 
