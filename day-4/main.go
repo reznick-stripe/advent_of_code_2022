@@ -46,6 +46,26 @@ func NewAssignmentFromString(s string) (*Assignment, error) {
 	return &Assignment{Lower: lower, Upper: upper}, nil
 }
 
+func AssignmentsFromLine(s string) (*Assignment, *Assignment, error) {
+	parts := strings.Split(s, ",")
+
+	if len(parts) != 2 {
+		return nil, nil, errors.New(fmt.Sprintf("error parsing line: %s", s))
+	}
+
+	first, err := NewAssignmentFromString(parts[0])
+	if err != nil {
+		return first, nil, err
+	}
+
+	second, err := NewAssignmentFromString(parts[1])
+	if err != nil {
+		return first, second, err
+	}
+
+	return first, second, nil
+}
+
 func debug() bool {
 	return os.Getenv("DEBUG") == "true"
 }

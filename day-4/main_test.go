@@ -138,3 +138,81 @@ func TestAssignmentFullyContains(t *testing.T) {
 		}
 	})
 }
+
+func TestAssignmentsFromLine(t *testing.T) {
+	t.Run("happy path", func(t *testing.T) {
+		input := "1-6,2-3"
+
+		first, second, err := AssignmentsFromLine(input)
+
+		if first == nil {
+			t.Error("expected assignments not to be nil, but first was nil")
+		}
+
+		if second == nil {
+			t.Error("expected assignments not to be nil, but second was nil")
+		}
+
+		if err != nil {
+			t.Errorf("expected no error, got %v", err)
+		}
+	})
+
+	t.Run("not enough parts", func(t *testing.T) {
+		input := "1-6"
+
+		first, second, err := AssignmentsFromLine(input)
+
+		if first != nil {
+			t.Errorf("expected assignments to be nil, but first was %v", first)
+		}
+
+		if second != nil {
+			t.Errorf("expected assignments to be nil, but second was %v", second)
+		}
+
+		if err == nil {
+			t.Error("expected an error")
+		}
+
+		if !strings.Contains(err.Error(), "error parsing line") {
+			t.Errorf("expected 'error parsing line', got %v", err)
+		}
+	})
+
+	t.Run("bad first", func(t *testing.T) {
+		input := "a-b,1-6"
+
+		first, second, err := AssignmentsFromLine(input)
+
+		if first != nil {
+			t.Errorf("expected assignments to be nil, but first was %v", first)
+		}
+
+		if second != nil {
+			t.Errorf("expected assignments to be nil, but second was %v", second)
+		}
+
+		if err == nil {
+			t.Error("expected an error")
+		}
+	})
+
+	t.Run("bad second", func(t *testing.T) {
+		input := "1-3,a-6"
+
+		first, second, err := AssignmentsFromLine(input)
+
+		if first == nil {
+			t.Error("expected first not to be nil, but it was")
+		}
+
+		if second != nil {
+			t.Errorf("expected assignments to be nil, but second was %v", second)
+		}
+
+		if err == nil {
+			t.Error("expected an error")
+		}
+	})
+}
