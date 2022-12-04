@@ -15,7 +15,7 @@ type Assignment struct {
 	Upper int
 }
 
-func (a *Assignment) FullyContains(other Assignment) bool {
+func (a *Assignment) FullyContains(other *Assignment) bool {
 	return a.Lower <= other.Lower && a.Upper >= other.Upper
 }
 

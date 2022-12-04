@@ -98,42 +98,42 @@ func TestAssignmentFullyContains(t *testing.T) {
 
 	t.Run("Fully Inside", func(t *testing.T) {
 		b := Assignment{Lower: 3, Upper: 5}
-		if !a.FullyContains(b) {
+		if !a.FullyContains(&b) {
 			t.Errorf("Expected %v to fully contain %v", a, b)
 		}
 	})
 
 	t.Run("Same Lower", func(t *testing.T) {
 		b := Assignment{Lower: 2, Upper: 5}
-		if !a.FullyContains(b) {
+		if !a.FullyContains(&b) {
 			t.Errorf("Expected %v to fully contain %v", a, b)
 		}
 	})
 
 	t.Run("Same Upper", func(t *testing.T) {
 		b := Assignment{Lower: 3, Upper: 6}
-		if !a.FullyContains(b) {
+		if !a.FullyContains(&b) {
 			t.Errorf("Expected %v to fully contain %v", a, b)
 		}
 	})
 
 	t.Run("Partial Overlap Lower", func(t *testing.T) {
 		b := Assignment{Lower: 1, Upper: 5}
-		if a.FullyContains(b) {
+		if a.FullyContains(&b) {
 			t.Errorf("Expected %v not to fully contain %v", a, b)
 		}
 	})
 
 	t.Run("Partial Overlap Upper", func(t *testing.T) {
 		b := Assignment{Lower: 3, Upper: 7}
-		if a.FullyContains(b) {
+		if a.FullyContains(&b) {
 			t.Errorf("Expected %v not to fully contain %v", a, b)
 		}
 	})
 
 	t.Run("No Overlap", func(t *testing.T) {
 		b := Assignment{Lower: 7, Upper: 9}
-		if a.FullyContains(b) {
+		if a.FullyContains(&b) {
 			t.Errorf("Expected %v not to fully contain %v", a, b)
 		}
 	})
