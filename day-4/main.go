@@ -1,11 +1,50 @@
-package main
+package day4
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
+
+type Assignment struct {
+	Lower int
+	Upper int
+}
+
+func (a *Assignment) FullyContains(other Assignment) bool {
+	return a.Lower <= other.Lower && a.Upper >= other.Upper
+}
+
+func NewAssignmentFromString(s string) (*Assignment, error) {
+	parts := strings.Split(s, "-")
+	if len(parts) != 2 {
+		return nil, errors.New(fmt.Sprintf("error parsing: %s", s))
+	}
+
+	lower, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return nil, err
+	}
+
+	upper, err := strconv.Atoi(parts[1])
+	if err != nil {
+		return nil, err
+	}
+
+	if lower == upper {
+		return nil, errors.New("lower and upper match")
+	}
+
+	if lower > upper {
+		return nil, errors.New("lower is bigger than upper")
+	}
+
+	return &Assignment{Lower: lower, Upper: upper}, nil
+}
 
 func debug() bool {
 	return os.Getenv("DEBUG") == "true"
