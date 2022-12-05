@@ -14,3 +14,7 @@ func (c Crate) Pop() (rune, Crate, error) {
 func (c Crate) Push(r rune) Crate {
 	return append(c, r)
 }
+
+func (c Crate) Last() rune {
+	return c[len(c)-1]
+}
