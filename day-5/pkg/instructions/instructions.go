@@ -13,6 +13,10 @@ type Instruction struct {
 	To    int
 }
 
+func (i Instruction) String() string {
+	return fmt.Sprintf("move %d from %d to %d", i.Count, i.From, i.To)
+}
+
 func NewInstructionFromInput(s string) (*Instruction, error) {
 	r, err := regexp.Compile(`^move (?P<count>\d+) from (?P<from>\d+) to (?P<to>\d+)`)
 
