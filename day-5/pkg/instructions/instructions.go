@@ -18,7 +18,7 @@ func (i Instruction) String() string {
 }
 
 func NewInstructionFromInput(s string) (*Instruction, error) {
-	r, err := regexp.Compile(`^move (?P<count>\d+) from (?P<from>\d+) to (?P<to>\d+)`)
+	r, err := regexp.Compile(`^ move (?P<count>\d+) from (?P<from>\d+) to (?P<to>\d+)`)
 
 	if err != nil {
 		return nil, err

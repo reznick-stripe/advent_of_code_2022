@@ -7,7 +7,7 @@ import (
 
 func TestNewInstructionFromInput(t *testing.T) {
 	t.Run("happy path", func(t *testing.T) {
-		input := "move 1 from 2 to 3"
+		input := " move 6 from 4 to 3"
 
 		i, err := NewInstructionFromInput(input)
 
@@ -15,12 +15,12 @@ func TestNewInstructionFromInput(t *testing.T) {
 			t.Errorf("Expected no error but got %s", err)
 		}
 
-		if i.Count != 1 {
-			t.Errorf("Expected Count to be 1 but was %d", i.Count)
+		if i.Count != 6 {
+			t.Errorf("Expected Count to be 6 but was %d", i.Count)
 		}
 
-		if i.From != 2 {
-			t.Errorf("Expected From to be 2 but was %d", i.From)
+		if i.From != 4 {
+			t.Errorf("Expected From to be 4 but was %d", i.From)
 		}
 
 		if i.To != 3 {
