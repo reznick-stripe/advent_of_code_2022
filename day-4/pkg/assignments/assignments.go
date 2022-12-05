@@ -12,8 +12,8 @@ type Assignment struct {
 	Upper int
 }
 
-func (a *Assignment) FullyContains(other *Assignment) bool {
-	return a.Lower <= other.Lower && a.Upper >= other.Upper
+func (a *Assignment) PartiallyContains(other *Assignment) bool {
+	return a.Lower <= other.Upper && other.Lower <= a.Upper
 }
 
 func NewAssignmentFromString(s string) (*Assignment, error) {

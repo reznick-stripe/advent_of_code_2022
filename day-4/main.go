@@ -34,7 +34,7 @@ func main() {
 			panic(err)
 		}
 
-		if first.FullyContains(second) || second.FullyContains(first) {
+		if first.PartiallyContains(second) {
 			count++
 		}
 	}
