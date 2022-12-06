@@ -1,12 +1,18 @@
 package cursor
 
-func Scan(input string) (bool, int) {
+import "errors"
+
+func Scan(input string, length int) (int, error) {
 	r := []rune(input)
 
+	if length > len(r) {
+		return 0, errors.New("length is longer than input")
+	}
+
 LOOP_OVER_INPUT:
-	for i := 0; i < len(r); i++ {
-		lookback := input[i : 4+i]
-		if len(lookback) != 4 {
+	for i := 0; i < len(r)-length; i++ {
+		lookback := input[i : length+i]
+		if len(lookback) != length {
 			continue LOOP_OVER_INPUT
 		}
 		counts := make(map[rune]int)
@@ -23,8 +29,8 @@ LOOP_OVER_INPUT:
 				continue LOOP_OVER_INPUT
 			}
 		}
-		return true, i + 4
+		return i + length, nil
 	}
 
-	return false, 0
+	return 0, errors.New("not found")
 }

@@ -10,6 +10,8 @@ import (
 
 func main() {
 	filename := "./input.txt"
+	packetLength := 4
+	messageLength := 14
 
 	buf, err := ioutil.ReadFile(filename)
 
@@ -23,21 +25,38 @@ func main() {
 		LogIt(fmt.Sprintf("input_length=%d", len(text)))
 	}
 
-	ok, output := cursor.Scan(text)
+	output, err := cursor.Scan(text, packetLength)
 
-	if ok {
+	if err != nil {
+		if Debug() {
+			LogIt(fmt.Sprintf("length=%d scan=not_ok err=%s", len(text), err))
+			LogIt("\n")
+			LogIO.Flush()
+		}
+		log.Fatal(err)
+	} else {
+		fmt.Printf("\npacket_output=%d\n", output)
+		if Debug() {
+			LogIt("scan=ok")
+			LogIt("\n")
+		}
+	}
+
+	output, err = cursor.Scan(text, messageLength)
+
+	if err != nil {
+		if Debug() {
+			LogIt(fmt.Sprintf("length=%d scan=not_ok err=%v", len(text), err))
+			LogIt("\n")
+			LogIO.Flush()
+		}
+		log.Fatal(err)
+	} else {
 		if Debug() {
 			LogIt("scan=ok")
 			LogIt("\n")
 			LogIO.Flush()
 		}
-		fmt.Printf("\noutput=%d\n", output)
-	} else {
-		if Debug() {
-			LogIt(fmt.Sprintf("length=%d scan=not_ok", len(text)))
-			LogIt("\n")
-			LogIO.Flush()
-		}
-		panic("wat")
+		fmt.Printf("\nmessage_output=%d\n", output)
 	}
 }
