@@ -8,14 +8,15 @@ import (
 type Board []Crate
 
 func (b Board) Move(inst *Instruction) error {
-	for i := 0; i < inst.Count; i++ {
-		r, c, err := b[inst.From].Pop()
-		if err != nil {
-			return err
-		}
+	r, c, err := b[inst.From].Pop(inst.Count)
+	if err != nil {
+		return err
+	}
 
-		b[inst.From] = c
-		b[inst.To] = b[inst.To].Push(r)
+	b[inst.From] = c
+
+	for i := 0; i < len(r); i++ {
+		b[inst.To] = b[inst.To].Push(r[i])
 	}
 
 	return nil

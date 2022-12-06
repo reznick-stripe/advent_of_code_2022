@@ -39,6 +39,10 @@ func TestBoardMove(t *testing.T) {
 		input := ` move 1 from 0 to 1
  move 1 from 2 to 0
  move 2 from 1 to 2`
+		// start: [ABC] [DEF] [GHI]
+		// 1.     [AB] [DEFC] [GHI]
+		// 2.     [ABI] [DEFC] [GH]
+		// 2.     [ABI] [DE] [GHFC]
 
 		scanner := bufio.NewScanner(strings.NewReader(input))
 
@@ -52,8 +56,8 @@ func TestBoardMove(t *testing.T) {
 
 		output := b.Top()
 
-		if output != "IEF" {
-			t.Errorf("expected 'ICH' but got %s", output)
+		if output != "IEC" {
+			t.Errorf("expected 'IEC' but got %s", output)
 		}
 	})
 
