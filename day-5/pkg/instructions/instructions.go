@@ -43,9 +43,5 @@ func NewInstructionFromInput(s string) (*Instruction, error) {
 		}
 	}
 
-	if data["from"] == 0 || data["to"] == 0 {
-		return nil, errors.New(fmt.Sprintf("bad parse: %s", s))
-	}
-
 	return &Instruction{Count: data["count"], From: data["from"], To: data["to"]}, nil
 }

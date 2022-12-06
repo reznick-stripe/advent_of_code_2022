@@ -41,18 +41,4 @@ func TestNewInstructionFromInput(t *testing.T) {
 			t.Errorf("expected 'bad parse', got %v", err)
 		}
 	})
-
-	t.Run("bad numbers", func(t *testing.T) {
-		input := "move 1 from b to 0"
-
-		_, err := NewInstructionFromInput(input)
-
-		if err == nil {
-			t.Error("Expected an error but got nones")
-		}
-
-		if !strings.Contains(err.Error(), "bad parse") {
-			t.Errorf("expected 'bad parse', got %v", err)
-		}
-	})
 }
