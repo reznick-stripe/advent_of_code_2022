@@ -9,9 +9,7 @@ import (
 
 func TestBoardMove(t *testing.T) {
 	t.Run("happy path", func(t *testing.T) {
-		b := Board{}
-		b[0] = Crate{'A', 'B', 'C'}
-		b[1] = Crate{'D', 'E', 'F'}
+		b := Board{Crate{'A', 'B', 'C'}, Crate{'D', 'E', 'F'}}
 
 		inst := Instruction{From: 0, To: 1, Count: 1}
 		err := b.Move(&inst)
@@ -36,9 +34,7 @@ func TestBoardMove(t *testing.T) {
 	})
 
 	t.Run("empty source", func(t *testing.T) {
-		b := Board{}
-		b[0] = Crate{}
-		b[1] = Crate{'D', 'E', 'F'}
+		b := Board{Crate{}, Crate{'D', 'E', 'F'}}
 
 		inst := Instruction{From: 0, To: 1, Count: 1}
 		err := b.Move(&inst)
@@ -53,9 +49,7 @@ func TestBoardMove(t *testing.T) {
 	})
 
 	t.Run("nonesense instructions", func(t *testing.T) {
-		b := Board{}
-		b[0] = Crate{}
-		b[1] = Crate{'D', 'E', 'F'}
+		b := Board{Crate{}, Crate{'D', 'E', 'F'}}
 
 		inst := Instruction{From: 0, To: 1, Count: 1}
 		err := b.Move(&inst)
@@ -71,15 +65,11 @@ func TestBoardMove(t *testing.T) {
 }
 
 func TestBoardLast(t *testing.T) {
-	b := Board{}
-	b[0] = Crate{'A', 'B', 'C'}
-	b[1] = Crate{}
-	b[2] = Crate{'D', 'E', 'F'}
+	b := Board{Crate{'A', 'B', 'C'}, Crate{}, Crate{'D', 'E', 'F'}}
 
 	s := b.Top()
 
 	if s != "CF" {
 		t.Errorf("expected 'CF', but got %s", s)
 	}
-
 }

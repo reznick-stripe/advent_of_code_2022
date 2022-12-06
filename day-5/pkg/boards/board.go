@@ -5,7 +5,7 @@ import (
 	. "main/pkg/instructions"
 )
 
-type Board map[int]Crate
+type Board []Crate
 
 func (b Board) Move(inst *Instruction) error {
 	for i := 0; i < inst.Count; i++ {
@@ -24,7 +24,8 @@ func (b Board) Move(inst *Instruction) error {
 func (b Board) Top() string {
 	str := ""
 
-	for _, v := range b {
+	for i := 0; i < len(b); i++ {
+		v := b[i]
 		if len(v) == 0 {
 			continue
 		}
