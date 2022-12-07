@@ -30,7 +30,7 @@ type Command struct {
 }
 
 func CommandFromPrompt(s string) (*Command, error) {
-	r, err := regexp.Compile(`^\$ (?P<cmd>\w+) (?P<target>\w+)`)
+	r, err := regexp.Compile(`^\$ (?P<cmd>\w+) (?P<target>[a-zA-Z0-9-_./]+)`)
 
 	if err != nil {
 		return nil, err

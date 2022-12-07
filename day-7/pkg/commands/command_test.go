@@ -25,6 +25,44 @@ func TestCommandFromPrompt(t *testing.T) {
 		}
 	})
 
+	t.Run("cd ..", func(t *testing.T) {
+		input := "$ cd .."
+
+		expected := Command{Type: CD, Target: ".."}
+		actual, err := CommandFromPrompt(input)
+
+		if err != nil {
+			t.Errorf("expected no error but got %s", err)
+		}
+
+		if expected.Type != actual.Type {
+			t.Errorf("expected %s but got %s", expected.Type, actual.Type)
+		}
+
+		if expected.Target != actual.Target {
+			t.Errorf("expected %s but got %s", expected.Target, actual.Target)
+		}
+	})
+
+	t.Run("cd /", func(t *testing.T) {
+		input := "$ cd /"
+
+		expected := Command{Type: CD, Target: "/"}
+		actual, err := CommandFromPrompt(input)
+
+		if err != nil {
+			t.Errorf("expected no error but got %s", err)
+		}
+
+		if expected.Type != actual.Type {
+			t.Errorf("expected %s but got %s", expected.Type, actual.Type)
+		}
+
+		if expected.Target != actual.Target {
+			t.Errorf("expected %s but got %s", expected.Target, actual.Target)
+		}
+	})
+
 	t.Run("ls", func(t *testing.T) {
 		input := "$ ls foo"
 
