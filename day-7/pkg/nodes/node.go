@@ -1,6 +1,11 @@
 package nodes
 
-import "errors"
+import (
+	"errors"
+	"regexp"
+	"strconv"
+	"strings"
+)
 
 type FileType int
 
@@ -21,6 +26,40 @@ type Option func(n *Node)
 
 func NewRoot() Node {
 	return Node{Name: "", Type: Directory}
+}
+
+func (n *Node) AddChildFromLsString(s string) error {
+	r, err := regexp.Compile(`(?P<type_or_size>\w+) (?P<name>[\w.]+)`)
+
+	if err != nil {
+		return err
+	}
+
+	m := r.FindStringSubmatch(s)
+
+	data := make(map[string]string)
+
+	if len(m) > 0 {
+		for i, name := range r.SubexpNames() {
+			if i != 0 && name != "" {
+				data[name] = m[i]
+			}
+		}
+	}
+
+	if strings.Contains(data["type_or_size"], "dir") {
+		d := &Node{Name: data["name"], Type: Directory}
+
+		return n.AddChild(d)
+	} else {
+		i, err := strconv.Atoi(data["type_or_size"])
+		if err != nil {
+			return err
+		}
+
+		c := &Node{Name: data["name"], Type: File, Size: i}
+		return n.AddChild(c)
+	}
 }
 
 func WithSize(size int) Option {

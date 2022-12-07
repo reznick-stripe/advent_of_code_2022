@@ -1,6 +1,7 @@
 package nodes
 
 import (
+	"bufio"
 	"strings"
 	"testing"
 )
@@ -149,4 +150,38 @@ func TestGetFullPath(t *testing.T) {
 			t.Errorf("expected: %s, actual: %s", expected, actual)
 		}
 	})
+}
+
+func TestAddChlidFromLsString(t *testing.T) {
+	n := NewRoot()
+	input := `dir dfmhjhd
+307728 ghpqs
+dir hztjntff
+dir rvstq
+dir sjt
+120579 whhj.pqt
+dir wrmm
+`
+
+	nodes := []*Node{
+		{Type: Directory, Name: "dfmhjhd"},
+		{Type: File, Size: 307728, Name: "ghpqs"},
+		{Type: Directory, Name: "hztjntff"},
+		{Type: Directory, Name: "rvstq"},
+		{Type: Directory, Name: "sjt"},
+		{Type: File, Size: 120579, Name: "whhj.pqt"},
+		{Type: Directory, Name: "wrmm"},
+	}
+
+	scanner := bufio.NewScanner(strings.NewReader(input))
+	for scanner.Scan() {
+		n.AddChildFromLsString(scanner.Text())
+	}
+
+	for _, c := range nodes {
+		f := n.FindChildByName(c.Name)
+		if !c.Eql(f) {
+			t.Errorf("expected %v to equal %v", c, f)
+		}
+	}
 }
