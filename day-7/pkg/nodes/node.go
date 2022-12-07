@@ -17,6 +17,14 @@ type Node struct {
 	Parent   *Node
 }
 
+type Option func(n *Node)
+
+func WithSize(size int) Option {
+	return func(n *Node) {
+		n.Size = size
+	}
+}
+
 func (n *Node) IsFile() bool {
 	return n.Type == File
 }
@@ -37,6 +45,40 @@ func (n *Node) AddChild(o *Node) error {
 
 func (n *Node) Eql(o *Node) bool {
 	return n.Type == o.Type && n.Name == o.Name && n.Size == o.Size
+}
+
+func (n *Node) FindOrCreateChild(fileType FileType, name string, opts ...Option) (*Node, error) {
+	tmp := &Node{
+		Type: fileType,
+		Name: name,
+	}
+
+	for _, opt := range opts {
+		opt(tmp)
+	}
+
+	c := findChild(tmp, n)
+
+	if c != nil {
+		return c, nil
+	}
+
+	err := n.AddChild(tmp)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return tmp, nil
+}
+
+func findChild(tmp *Node, n *Node) *Node {
+	for _, c := range n.Children {
+		if c.Eql(tmp) {
+			return c
+		}
+	}
+	return nil
 }
 
 func (n *Node) GetSize() int {

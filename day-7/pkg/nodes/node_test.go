@@ -82,3 +82,40 @@ func TestAddChild(t *testing.T) {
 		}
 	})
 }
+
+func TestFindOrCreateChild(t *testing.T) {
+	t.Run("find file", func(t *testing.T) {
+		gif := Node{Type: File, Name: "gif", Size: 15}
+		d := Node{Type: Directory, Name: "d", Children: []*Node{&gif}}
+
+		output, err := d.FindOrCreateChild(File, "gif", WithSize(15))
+
+		if err != nil {
+			t.Errorf("expected no error but got %s", err)
+		}
+
+		if output != &gif {
+			t.Errorf("expected %v but got %v", &gif, output)
+		}
+	})
+
+	t.Run("create file", func(t *testing.T) {
+		gif := Node{Type: File, Name: "gif", Size: 15}
+		img := Node{Type: File, Name: "img", Size: 15}
+		d := Node{Type: Directory, Name: "d", Children: []*Node{&gif}}
+
+		output, err := d.FindOrCreateChild(File, "img", WithSize(15))
+
+		if err != nil {
+			t.Errorf("expected no error but got %s", err)
+		}
+
+		if !output.Eql(&img) {
+			t.Errorf("expected %v but got %v", &gif, output)
+		}
+
+		if len(d.Children) != 2 {
+			t.Errorf("expected children lenght of 2 but got %d", len(d.Children))
+		}
+	})
+}
