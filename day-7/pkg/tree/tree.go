@@ -111,8 +111,8 @@ func (t *Tree) WalkWithCriteria(criteria func(*Node) bool) []*Node {
 func visitChildren(collector []*Node, n *Node, criteria func(*Node) bool) []*Node {
 	if criteria(n) {
 		collector = append(collector, n)
-		return collector
 	}
+
 	for _, c := range n.Children {
 		collector = visitChildren(collector, c, criteria)
 	}

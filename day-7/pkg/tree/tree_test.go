@@ -174,7 +174,7 @@ func TestWalkWithCriteria(t *testing.T) {
 	r.Root.AddChild(&a)
 
 	criteria := func(n *nodes.Node) bool {
-		return n.GetSize() <= 30
+		return n.GetSize() <= 30 && n.IsDir()
 	}
 
 	expected := []*nodes.Node{
