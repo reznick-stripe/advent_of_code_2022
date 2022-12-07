@@ -27,6 +27,15 @@ func (c CommandType) String() string {
 type Command struct {
 	Type   CommandType
 	Target string
+	Data   []string
+}
+
+type Option func(c *Command)
+
+func WithData(data []string) Option {
+	return func(c *Command) {
+		c.Data = data
+	}
 }
 
 func CommandFromPrompt(s string) (*Command, error) {
