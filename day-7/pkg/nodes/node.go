@@ -20,7 +20,7 @@ type Node struct {
 type Option func(n *Node)
 
 func NewRoot() Node {
-	return Node{Name: "/", Type: Directory}
+	return Node{Name: "", Type: Directory}
 }
 
 func WithSize(size int) Option {
@@ -30,7 +30,7 @@ func WithSize(size int) Option {
 }
 
 func (n *Node) IsRoot() bool {
-	return n.Name == "/" && n.Parent == nil
+	return n.Parent == nil
 }
 
 func (n *Node) IsFile() bool {
@@ -39,6 +39,18 @@ func (n *Node) IsFile() bool {
 
 func (n *Node) IsDir() bool {
 	return n.Type == Directory
+}
+
+func (n *Node) GetFullPath() string {
+	return recursivelyGetPath(n)
+}
+
+func recursivelyGetPath(n *Node) string {
+	if n == nil {
+		return ""
+	}
+
+	return recursivelyGetPath(n.Parent) + "/" + n.Name
 }
 
 func (n *Node) AddChild(o *Node) error {

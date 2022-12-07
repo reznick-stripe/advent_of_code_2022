@@ -119,3 +119,34 @@ func TestFindOrCreateChild(t *testing.T) {
 		}
 	})
 }
+
+func TestGetFullPath(t *testing.T) {
+	t.Run("/a/b/c/gif", func(t *testing.T) {
+		gif := Node{Type: File, Name: "gif", Size: 15}
+		c := Node{Type: Directory, Name: "c", Children: []*Node{}}
+		c.AddChild(&gif)
+		b := Node{Type: Directory, Name: "b", Children: []*Node{}}
+		b.AddChild(&c)
+		a := Node{Type: Directory, Name: "a", Children: []*Node{}}
+		a.AddChild(&b)
+
+		expected := "/a/b/c/gif"
+
+		actual := gif.GetFullPath()
+
+		if expected != actual {
+			t.Errorf("expected: %s, actual: %s", expected, actual)
+		}
+	})
+
+	t.Run("/", func(t *testing.T) {
+		n := NewRoot()
+		expected := "/"
+
+		actual := n.GetFullPath()
+
+		if expected != actual {
+			t.Errorf("expected: %s, actual: %s", expected, actual)
+		}
+	})
+}
