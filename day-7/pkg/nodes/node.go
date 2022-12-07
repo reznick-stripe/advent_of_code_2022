@@ -19,10 +19,18 @@ type Node struct {
 
 type Option func(n *Node)
 
+func NewRoot() Node {
+	return Node{Name: "/", Type: Directory}
+}
+
 func WithSize(size int) Option {
 	return func(n *Node) {
 		n.Size = size
 	}
+}
+
+func (n *Node) IsRoot() bool {
+	return n.Name == "/" && n.Parent == nil
 }
 
 func (n *Node) IsFile() bool {
