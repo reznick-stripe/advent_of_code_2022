@@ -130,6 +130,8 @@ func TestGetFullPath(t *testing.T) {
 		b.AddChild(&c)
 		a := Node{Type: Directory, Name: "a", Children: []*Node{}}
 		a.AddChild(&b)
+		n := NewRoot()
+		n.AddChild(&a)
 
 		expected := "/a/b/c/gif"
 
@@ -145,6 +147,24 @@ func TestGetFullPath(t *testing.T) {
 		expected := "/"
 
 		actual := n.GetFullPath()
+
+		if expected != actual {
+			t.Errorf("expected: %s, actual: %s", expected, actual)
+		}
+	})
+
+	t.Run("/a/b/c", func(t *testing.T) {
+		c := Node{Type: Directory, Name: "c", Children: []*Node{}}
+		b := Node{Type: Directory, Name: "b", Children: []*Node{}}
+		b.AddChild(&c)
+		a := Node{Type: Directory, Name: "a", Children: []*Node{}}
+		a.AddChild(&b)
+		n := NewRoot()
+		n.AddChild(&a)
+
+		expected := "/a/b/c"
+
+		actual := c.GetFullPath()
 
 		if expected != actual {
 			t.Errorf("expected: %s, actual: %s", expected, actual)

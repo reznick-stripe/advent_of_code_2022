@@ -89,6 +89,14 @@ func recursivelyGetPath(n *Node) string {
 		return ""
 	}
 
+	if n.IsRoot() {
+		return "/"
+	}
+
+	if n.Parent.IsRoot() {
+		return "/" + n.Name
+	}
+
 	return recursivelyGetPath(n.Parent) + "/" + n.Name
 }
 
