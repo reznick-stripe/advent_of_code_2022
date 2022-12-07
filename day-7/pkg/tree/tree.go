@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	command "main/pkg/commands"
+	. "main/pkg/debug"
 	. "main/pkg/nodes"
 )
 
@@ -18,7 +19,11 @@ func NewTree() Tree {
 	return Tree{Root: &root, Pwd: &root}
 }
 
-func (t *Tree) visit(n *Node) {
+func (t *Tree) ReturnToRoot() {
+	t.Visit(t.Root)
+}
+
+func (t *Tree) Visit(n *Node) {
 	t.Pwd = n
 }
 
@@ -37,6 +42,10 @@ func (t *Tree) Exec(cmdString string, opts ...command.Option) error {
 		return err
 	}
 
+	if Debug() {
+		LogIt(fmt.Sprintf("pwd_full_path=%s pwd_name=%s cmd=%s", t.Pwd.GetFullPath(), t.Pwd.Name, cmdString))
+	}
+
 	switch cmd.Type {
 	case command.CD:
 		return t.handleCd(cmd)
@@ -49,30 +58,36 @@ func (t *Tree) Exec(cmdString string, opts ...command.Option) error {
 
 func (t *Tree) handleCd(cmd *command.Command) error {
 	if cmd.Target == "/" {
-		t.visit(t.Root)
+		t.Visit(t.Root)
 		return nil
 	}
 
 	if cmd.Target == ".." {
 		if t.Pwd.IsRoot() {
-			t.visit(t.Root)
+			t.Visit(t.Root)
 			return nil
 		} else {
-			t.visit(t.Pwd.Parent)
+			t.Visit(t.Pwd.Parent)
 			return nil
 		}
 	}
 
 	target := t.Pwd.FindChildByName(cmd.Target)
 	if target == nil {
+		if Debug() {
+			LogIt(fmt.Sprintf("error=true error=404 target=%s", target.GetFullPath()))
+		}
 		return errors.New(fmt.Sprintf("pwd=%s cd: no such file or directory: %s", t.Pwd.GetFullPath(), cmd.Target))
 	}
 
 	if target.IsFile() {
+		if Debug() {
+			LogIt(fmt.Sprintf("error=true error=not_a_dir target_path=%s target_type=%s", target.GetFullPath(), target.TypeString()))
+		}
 		return errors.New(fmt.Sprintf("pwd=%s cd: not a directory: %s", t.Pwd.GetFullPath(), cmd.Target))
 	}
 
-	t.visit(target)
+	t.Visit(target)
 	return nil
 }
 

@@ -2,6 +2,8 @@ package nodes
 
 import (
 	"errors"
+	"fmt"
+	. "main/pkg/debug"
 	"regexp"
 	"strconv"
 	"strings"
@@ -25,7 +27,7 @@ type Node struct {
 type Option func(n *Node)
 
 func NewRoot() Node {
-	return Node{Name: "", Type: Directory}
+	return Node{Name: "/", Type: Directory}
 }
 
 func (n *Node) AddChildFromLsString(s string) error {
@@ -107,6 +109,10 @@ func (n *Node) AddChild(o *Node) error {
 
 	o.Parent = n
 	n.Children = append(n.Children, o)
+
+	if Debug() {
+		LogIt(fmt.Sprintf("add_child=%s child_type=%s", o.GetFullPath(), o.TypeString()))
+	}
 	return nil
 }
 
@@ -172,4 +178,15 @@ func getSizeRecursively(n *Node) int {
 	}
 
 	return sum
+}
+
+func (n *Node) TypeString() string {
+	switch n.Type {
+	case File:
+		return "file"
+	case Directory:
+		return "directory"
+	default:
+		return ""
+	}
 }
