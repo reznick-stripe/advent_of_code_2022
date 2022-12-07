@@ -67,6 +67,16 @@ func (n *Node) Eql(o *Node) bool {
 	return n.Type == o.Type && n.Name == o.Name && n.Size == o.Size
 }
 
+func (n *Node) FindChildByName(s string) *Node {
+	for _, c := range n.Children {
+		if c.Name == s {
+			return c
+		}
+	}
+
+	return nil
+}
+
 func (n *Node) FindOrCreateChild(fileType FileType, name string, opts ...Option) (*Node, error) {
 	tmp := &Node{
 		Type: fileType,
