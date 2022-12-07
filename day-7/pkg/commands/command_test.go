@@ -64,9 +64,9 @@ func TestCommandFromPrompt(t *testing.T) {
 	})
 
 	t.Run("ls", func(t *testing.T) {
-		input := "$ ls foo"
+		input := "$ ls"
 
-		expected := Command{Type: LS, Target: "foo"}
+		expected := Command{Type: LS, Target: ""}
 		actual, err := CommandFromPrompt(input)
 
 		if err != nil {
@@ -79,20 +79,6 @@ func TestCommandFromPrompt(t *testing.T) {
 
 		if expected.Target != actual.Target {
 			t.Errorf("expected %s but got %s", expected.Target, actual.Target)
-		}
-	})
-
-	t.Run("no target", func(t *testing.T) {
-		input := "$ ls"
-
-		_, err := CommandFromPrompt(input)
-
-		if err == nil {
-			t.Error("expected an error but got none")
-		}
-
-		if !strings.Contains(err.Error(), "no target") {
-			t.Errorf("expected 'no target', got %v", err)
 		}
 	})
 

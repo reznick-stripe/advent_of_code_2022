@@ -30,7 +30,7 @@ type Command struct {
 }
 
 func CommandFromPrompt(s string) (*Command, error) {
-	r, err := regexp.Compile(`^\$ (?P<cmd>\w+) (?P<target>[a-zA-Z0-9-_./]+)`)
+	r, err := regexp.Compile(`^\$ (?P<cmd>\w+)[ ]?(?P<target>[a-zA-Z0-9-_./]+)?`)
 
 	if err != nil {
 		return nil, err
@@ -48,15 +48,15 @@ func CommandFromPrompt(s string) (*Command, error) {
 		}
 	}
 
-	if data["target"] == "" {
-		return nil, errors.New(fmt.Sprintf("no target from %s", s))
-	}
-
 	switch data["cmd"] {
 	case "cd":
+		if data["target"] == "" {
+			return nil, errors.New(fmt.Sprintf("no target from %s", s))
+		}
+
 		return &Command{Type: CD, Target: data["target"]}, nil
 	case "ls":
-		return &Command{Type: LS, Target: data["target"]}, nil
+		return &Command{Type: LS, Target: ""}, nil
 	default:
 		return nil, errors.New(fmt.Sprintf("no parsable command from %s", s))
 	}
