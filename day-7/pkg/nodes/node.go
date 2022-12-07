@@ -1,5 +1,7 @@
 package nodes
 
+import "errors"
+
 type FileType int
 
 const (
@@ -12,6 +14,7 @@ type Node struct {
 	Name     string
 	Size     int
 	Children []*Node
+	Parent   *Node
 }
 
 func (n *Node) IsFile() bool {
@@ -20,6 +23,16 @@ func (n *Node) IsFile() bool {
 
 func (n *Node) IsDir() bool {
 	return n.Type == Directory
+}
+
+func (n *Node) AddChild(o *Node) error {
+	if n.IsFile() {
+		return errors.New("cannot add a child to a file")
+	}
+
+	o.Parent = n
+	n.Children = append(n.Children, o)
+	return nil
 }
 
 func (n *Node) GetSize() int {
