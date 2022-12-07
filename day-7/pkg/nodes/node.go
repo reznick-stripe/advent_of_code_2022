@@ -35,6 +35,10 @@ func (n *Node) AddChild(o *Node) error {
 	return nil
 }
 
+func (n *Node) Eql(o *Node) bool {
+	return n.Type == o.Type && n.Name == o.Name && n.Size == o.Size
+}
+
 func (n *Node) GetSize() int {
 	return getSizeRecursively(n)
 }
