@@ -42,10 +42,6 @@ func (t *Tree) Exec(cmdString string, opts ...command.Option) error {
 		return err
 	}
 
-	if Debug() {
-		LogIt(fmt.Sprintf("pwd_full_path=%s pwd_name=%s cmd=%s", t.Pwd.GetFullPath(), t.Pwd.Name, cmdString))
-	}
-
 	switch cmd.Type {
 	case command.CD:
 		return t.handleCd(cmd)
@@ -88,6 +84,9 @@ func (t *Tree) handleCd(cmd *command.Command) error {
 	}
 
 	t.Visit(target)
+	if Debug() {
+		LogIt(fmt.Sprintf("cmd_result=success new_pwd=%s", t.Pwd.GetFullPath()))
+	}
 	return nil
 }
 
@@ -111,6 +110,10 @@ func (t *Tree) WalkWithCriteria(criteria func(*Node) bool) []*Node {
 func visitChildren(collector []*Node, n *Node, criteria func(*Node) bool) []*Node {
 	if criteria(n) {
 		collector = append(collector, n)
+		if Debug() {
+			LogIt(fmt.Sprintf("criteria_match=true type=%s", n.TypeString()))
+			LogIt("\n")
+		}
 	}
 
 	for _, c := range n.Children {

@@ -28,12 +28,12 @@ func Parse(scanner *bufio.Scanner) (error, *Tree) {
 		if strings.ContainsRune(l, '$') {
 			cmdString = l
 			if Debug() {
-				LogIt(fmt.Sprintf("line_type=cmd cmd=%s", cmdString))
+				LogIt(fmt.Sprintf("line_type=cmd cmd='%s' pwd=%s", cmdString, tree.Pwd.GetFullPath()))
 			}
 		} else {
 			dataBuff = append(dataBuff, l)
 			if Debug() {
-				LogIt(fmt.Sprintf("line_type=data cmd=%s data_buff_len=%d entry=%s pwd=%s", cmdString, len(dataBuff), l, tree.Pwd.GetFullPath()))
+				LogIt(fmt.Sprintf("line_type=data cmd='%s' data_buff_len=%d entry='%s' pwd=%s", cmdString, len(dataBuff), l, tree.Pwd.GetFullPath()))
 			}
 		}
 

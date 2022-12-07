@@ -111,7 +111,7 @@ func (n *Node) AddChild(o *Node) error {
 	n.Children = append(n.Children, o)
 
 	if Debug() {
-		LogIt(fmt.Sprintf("add_child=%s child_type=%s", o.GetFullPath(), o.TypeString()))
+		LogIt(fmt.Sprintf("[add_child=%s child_type=%s child_size=%d]", o.GetFullPath(), o.TypeString(), o.Size))
 	}
 	return nil
 }
