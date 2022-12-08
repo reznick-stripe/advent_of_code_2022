@@ -30,7 +30,7 @@ func TestParser(t *testing.T) {
 		t.Errorf("expected no error, got %s", err)
 	}
 
-	for i, row := range *output {
+	for i, row := range output.Data {
 		for j, col := range row {
 			e := expected[i][j]
 			if e != col {

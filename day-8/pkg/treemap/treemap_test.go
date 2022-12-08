@@ -5,11 +5,15 @@ import "testing"
 func TestCountForARow(t *testing.T) {
 	t.Run("east", func(t *testing.T) {
 		m := TreeMap{
-			{3, 0, 3, 7, 3},
-			{2, 5, 5, 1, 2},
-			{6, 5, 3, 3, 2},
-			{3, 3, 5, 4, 9},
-			{3, 5, 3, 9, 0},
+			Data: [][]int{
+				{3, 0, 3, 7, 3},
+				{2, 5, 5, 1, 2},
+				{6, 5, 3, 3, 2},
+				{3, 3, 5, 4, 9},
+				{3, 5, 3, 9, 0},
+			},
+			RowCount: 5,
+			ColCount: 5,
 		}
 
 		row := 1
@@ -22,11 +26,15 @@ func TestCountForARow(t *testing.T) {
 
 	t.Run("west", func(t *testing.T) {
 		m := TreeMap{
-			{3, 0, 3, 7, 3},
-			{2, 5, 5, 1, 2},
-			{6, 5, 3, 3, 2},
-			{3, 3, 5, 4, 9},
-			{3, 5, 3, 9, 0},
+			Data: [][]int{
+				{3, 0, 3, 7, 3},
+				{2, 5, 5, 1, 2},
+				{6, 5, 3, 3, 2},
+				{3, 3, 5, 4, 9},
+				{3, 5, 3, 9, 0},
+			},
+			RowCount: 5,
+			ColCount: 5,
 		}
 
 		row := 4
@@ -41,11 +49,15 @@ func TestCountForARow(t *testing.T) {
 func TestCountForAColumn(t *testing.T) {
 	t.Run("north", func(t *testing.T) {
 		m := TreeMap{
-			{3, 0, 3, 7, 3},
-			{2, 5, 5, 1, 2},
-			{6, 5, 3, 3, 2},
-			{3, 3, 5, 4, 9},
-			{3, 5, 3, 9, 0},
+			Data: [][]int{
+				{3, 0, 3, 7, 3},
+				{2, 5, 5, 1, 2},
+				{6, 5, 3, 3, 2},
+				{3, 3, 5, 4, 9},
+				{3, 5, 3, 9, 0},
+			},
+			RowCount: 5,
+			ColCount: 5,
 		}
 
 		col := 2
@@ -58,11 +70,15 @@ func TestCountForAColumn(t *testing.T) {
 
 	t.Run("south", func(t *testing.T) {
 		m := TreeMap{
-			{3, 0, 3, 7, 3},
-			{2, 5, 5, 1, 2},
-			{6, 5, 3, 3, 2},
-			{3, 3, 5, 4, 9},
-			{3, 5, 3, 6, 0},
+			Data: [][]int{
+				{3, 0, 3, 7, 3},
+				{2, 5, 5, 1, 2},
+				{6, 5, 3, 3, 2},
+				{3, 3, 5, 4, 9},
+				{3, 5, 3, 6, 0},
+			},
+			RowCount: 5,
+			ColCount: 5,
 		}
 
 		col := 3
