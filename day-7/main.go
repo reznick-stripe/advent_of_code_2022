@@ -8,9 +8,10 @@ import (
 	. "main/pkg/nodes"
 	. "main/pkg/parser"
 	"os"
+	"sort"
 )
 
-const SIZE_MAX = 100_000
+const SIZE_MAX = 40_000_000
 
 func main() {
 	file, err := os.Open("./input.txt")
@@ -33,27 +34,28 @@ func main() {
 		log.Fatal(err)
 	}
 
+	remainingSize := tree.Root.GetSize() - SIZE_MAX
+
+	if Debug() {
+		LogIt(fmt.Sprintf("to_remove=%d", remainingSize))
+		LogIt("\n")
+	}
+
 	criteria := func(n *Node) bool {
-		s := n.GetSize()
-		if Debug() {
-			if s <= SIZE_MAX && n.IsDir() {
-				LogIt(fmt.Sprintf("size=%d", s))
-			}
-		}
-		return s <= SIZE_MAX && n.IsDir()
+		return n.GetSize() >= remainingSize && n.IsDir()
 	}
 
 	results := tree.WalkWithCriteria(criteria)
 
-	sum := 0
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].GetSize() < results[j].GetSize()
+	})
 
-	for _, r := range results {
-		sum += r.GetSize()
-	}
 	if Debug() {
+		LogIt(fmt.Sprintf("lowest=%d highest=%d", results[0].GetSize(), results[len(results)-1].GetSize()))
 		LogIt("\n")
 		LogIO.Flush()
 	}
 
-	fmt.Println(fmt.Sprintf("total_size=%d", sum))
+	fmt.Println(fmt.Sprintf("total_size=%d", results[0].GetSize()))
 }
