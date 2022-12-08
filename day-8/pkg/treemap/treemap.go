@@ -183,3 +183,17 @@ func (t TreeMap) Count() int {
 
 	return sum
 }
+
+func (t *TreeMap) GetBiggestScenicScore() int {
+	biggestYet := 0
+	for y, row := range t.Data {
+		for x := range row {
+			s := GetScoreForLocation(t, y, x)
+			if s > biggestYet {
+				biggestYet = s
+			}
+		}
+	}
+
+	return biggestYet
+}

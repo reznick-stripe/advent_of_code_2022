@@ -107,3 +107,31 @@ func TestGetScoreForLocation(t *testing.T) {
 		t.Errorf("expected %d but got %d for (%d,%d)", expected, actual, row, col)
 	}
 }
+
+func TestGetBiggestScenicScore(t *testing.T) {
+	m := TreeMap{
+		Data: [][]int{
+			{3, 0, 3, 7, 3},
+			{2, 5, 5, 1, 2},
+			{6, 5, 3, 3, 2},
+			{3, 3, 5, 4, 9},
+			{3, 5, 3, 9, 0},
+		},
+		RowCount: 5,
+		ColCount: 5,
+		VisibleMap: [][]rune{
+			{'n', 'n', 'n', 'n', 'n'},
+			{'n', 'n', 'n', 'n', 'n'},
+			{'n', 'n', 'n', 'n', 'n'},
+			{'n', 'n', 'n', 'n', 'n'},
+			{'n', 'n', 'n', 'n', 'n'},
+		},
+	}
+
+	expected := 8
+	actual := m.GetBiggestScenicScore()
+
+	if expected != actual {
+		t.Errorf("expected the biggest score to be %d but it was %d", expected, actual)
+	}
+}
