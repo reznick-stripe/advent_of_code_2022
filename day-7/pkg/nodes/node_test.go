@@ -19,6 +19,15 @@ func TestGetSize(t *testing.T) {
 	})
 
 	t.Run("children", func(t *testing.T) {
+		// a: 165
+		//  - txt: 50
+		//  - b: 30
+		//    - dat: 10
+		//    - img: 20
+		//  - c: 85
+		//    - d: 15
+		//      - gif: 15
+		//    - exe: 70
 		txt := Node{Type: File, Name: "txt", Size: 50}
 		img := Node{Type: File, Name: "img", Size: 20}
 		dat := Node{Type: File, Name: "dat", Size: 10}
@@ -39,6 +48,13 @@ func TestGetSize(t *testing.T) {
 
 		expected := 165
 		actual := a.GetSize()
+
+		if expected != actual {
+			t.Errorf("expected %d but got %d", expected, actual)
+		}
+
+		expected = 85
+		actual = c.GetSize()
 
 		if expected != actual {
 			t.Errorf("expected %d but got %d", expected, actual)

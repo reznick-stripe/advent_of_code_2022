@@ -3,6 +3,7 @@ package tree
 import (
 	commands "main/pkg/commands"
 	nodes "main/pkg/nodes"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -174,20 +175,25 @@ func TestWalkWithCriteria(t *testing.T) {
 	r.Root.AddChild(&a)
 
 	criteria := func(n *nodes.Node) bool {
-		return n.GetSize() <= 30 && n.IsDir()
+		return n.GetSize() >= 30 && n.IsDir()
 	}
 
 	expected := []*nodes.Node{
+		r.Root,
+		&a,
 		&b,
-		&d,
+		&c,
 	}
 
 	output := r.WalkWithCriteria(criteria)
+
+	sort.Slice(output, func(i, j int) bool {
+		return output[i].Name < output[j].Name
+	})
 
 	for i, c := range output {
 		if !c.Eql(expected[i]) {
 			t.Errorf("expected %v, actual %v", expected[i], c)
 		}
 	}
-
 }
