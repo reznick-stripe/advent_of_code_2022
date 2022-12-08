@@ -2,8 +2,6 @@ package nodes
 
 import (
 	"errors"
-	"fmt"
-	. "main/pkg/debug"
 	"regexp"
 	"strconv"
 	"strings"
@@ -110,9 +108,6 @@ func (n *Node) AddChild(o *Node) error {
 	o.Parent = n
 	n.Children = append(n.Children, o)
 
-	if Debug() {
-		LogIt(fmt.Sprintf("[add_child=%s child_type=%s child_size=%d]", o.GetFullPath(), o.TypeString(), o.Size))
-	}
 	return nil
 }
 

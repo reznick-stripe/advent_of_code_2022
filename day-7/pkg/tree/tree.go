@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	command "main/pkg/commands"
-	. "main/pkg/debug"
 	. "main/pkg/nodes"
 )
 
@@ -70,23 +69,14 @@ func (t *Tree) handleCd(cmd *command.Command) error {
 
 	target := t.Pwd.FindChildByName(cmd.Target)
 	if target == nil {
-		if Debug() {
-			LogIt(fmt.Sprintf("error=true error=404 target=%s", target.GetFullPath()))
-		}
 		return errors.New(fmt.Sprintf("pwd=%s cd: no such file or directory: %s", t.Pwd.GetFullPath(), cmd.Target))
 	}
 
 	if target.IsFile() {
-		if Debug() {
-			LogIt(fmt.Sprintf("error=true error=not_a_dir target_path=%s target_type=%s", target.GetFullPath(), target.TypeString()))
-		}
 		return errors.New(fmt.Sprintf("pwd=%s cd: not a directory: %s", t.Pwd.GetFullPath(), cmd.Target))
 	}
 
 	t.Visit(target)
-	if Debug() {
-		LogIt(fmt.Sprintf("cmd_result=success new_pwd=%s", t.Pwd.GetFullPath()))
-	}
 	return nil
 }
 
@@ -110,10 +100,6 @@ func (t *Tree) WalkWithCriteria(criteria func(*Node) bool) []*Node {
 func visitChildren(collector []*Node, n *Node, criteria func(*Node) bool) []*Node {
 	if criteria(n) {
 		collector = append(collector, n)
-		if Debug() {
-			LogIt(fmt.Sprintf("criteria_match=true type=%s", n.TypeString()))
-			LogIt("\n")
-		}
 	}
 
 	for _, c := range n.Children {
