@@ -27,4 +27,8 @@ func main() {
 	sum := treeMap.Count()
 
 	fmt.Println(fmt.Sprintf("sum=%d", sum))
+
+	biggestScenicScore := treeMap.GetBiggestScenicScore()
+
+	fmt.Println(fmt.Sprintf("biggest_scenic_score=%d", biggestScenicScore))
 }
