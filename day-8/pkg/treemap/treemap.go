@@ -1,20 +1,27 @@
 package treemap
 
+import (
+	"fmt"
+)
+
 type TreeMap struct {
-	Data     [][]int
-	RowCount int
-	ColCount int
+	Data       [][]int
+	RowCount   int
+	ColCount   int
+	VisibleMap [][]rune
 }
 
-func (t TreeMap) CountForARow(row int, vantage string) int {
-	visibleCount := 0
+func (t *TreeMap) ScanARow(row int, vantage string) error {
 	biggestYet := 0
 	r := t.Data[row]
 	if vantage == "east" {
 		// facing east from the west
 		for i, n := range r {
+			if n == -1 {
+				continue
+			}
 			if i == 0 || n > biggestYet {
-				visibleCount++
+				t.VisibleMap[row][i] = 'y'
 				biggestYet = n
 				continue
 			}
@@ -24,29 +31,34 @@ func (t TreeMap) CountForARow(row int, vantage string) int {
 		endIndex := t.ColCount - 1
 		for i := endIndex; i >= 0; i-- {
 			n := r[i]
+			if n == -1 {
+				continue
+			}
 			if i == endIndex || n > biggestYet {
-				visibleCount++
+				t.VisibleMap[row][i] = 'y'
 				biggestYet = n
 				continue
 			}
 		}
 	} else {
-		panic("invalid direction")
+		return fmt.Errorf("bad vantage: %s", vantage)
 	}
 
-	return visibleCount
+	return nil
 }
 
-func (t TreeMap) CountForAColumn(col int, vantage string) int {
-	visibleCount := 0
+func (t *TreeMap) ScanAColumn(col int, vantage string) error {
 	biggestYet := 0
 
 	if vantage == "south" {
 		// facing south from the north
 		for i, row := range t.Data {
 			n := row[col]
+			if n == -1 {
+				continue
+			}
 			if i == 0 || n > biggestYet {
-				visibleCount++
+				t.VisibleMap[i][col] = 'y'
 				biggestYet = n
 				continue
 			}
@@ -56,15 +68,47 @@ func (t TreeMap) CountForAColumn(col int, vantage string) int {
 		endIndex := t.RowCount - 1
 		for i := endIndex; i >= 0; i-- {
 			n := t.Data[i][col]
+			if n == -1 {
+				continue
+			}
 			if i == endIndex || n > biggestYet {
-				visibleCount++
+				t.VisibleMap[i][col] = 'y'
 				biggestYet = n
 				continue
 			}
 		}
 	} else {
-		panic("invalid direction")
+		return fmt.Errorf("bad vantage: %s", vantage)
 	}
 
-	return visibleCount
+	return nil
+}
+
+func (t *TreeMap) scan() {
+	for y := range t.Data {
+		for _, direction := range []string{"east", "west"} {
+			t.ScanARow(y, direction)
+		}
+	}
+
+	for x := 0; x < t.ColCount-1; x++ {
+		for _, direction := range []string{"north", "south"} {
+			t.ScanAColumn(x, direction)
+		}
+	}
+}
+
+func (t TreeMap) Count() int {
+	t.scan()
+	sum := 0
+
+	for y, row := range t.Data {
+		for x := range row {
+			if t.VisibleMap[y][x] == 'y' {
+				sum++
+			}
+		}
+	}
+
+	return sum
 }
